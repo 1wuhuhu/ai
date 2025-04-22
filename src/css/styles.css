@@ -1,0 +1,330 @@
+/* 全局样式 */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #F5F5F5;
+    color: #333333;
+    margin: 0;
+    padding: 0;
+}
+
+/* 顶部导航栏样式 */
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    border-bottom: 1px solid #e0e0e0;
+}
+
+nav .logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007BFF;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+nav ul li {
+    margin-right: 16px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007BFF;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #0056b3;
+}
+
+nav .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+nav input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+nav input[type="text"]:focus {
+    border-color: #007BFF;
+}
+
+nav .search-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+nav .search-btn:hover {
+    background-color: #0056b3;
+}
+
+nav button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+nav .login-btn {
+    background-color: #F5F5F5;
+    color: #000;
+}
+
+nav .login-btn:hover {
+    background-color: #e0e0e0;
+}
+
+nav .register-btn {
+    background-color: #007BFF;
+    color: white;
+}
+
+nav .register-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 轮播图样式 */
+.carousel {
+    position: relative;
+    margin: 32px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 80%; /* 调整轮播图宽度 */
+}
+
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 40%; /* 调整轮播图高度比例 */
+}
+
+.carousel-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.7s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.carousel-indicators button {
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 50%;
+    background-color: #ccc;
+    opacity: 0.5;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-indicators button.active {
+    opacity: 1;
+    background-color: #007BFF;
+}
+
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+}
+
+.carousel-control:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-control.prev {
+    left: 10px;
+}
+
+.carousel-control.next {
+    right: 10px;
+}
+
+.carousel:hover .carousel-control {
+    opacity: 1;
+}
+
+/* 推荐作品样式 */
+.works-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 32px; /* 增大作品间距 */
+    margin-bottom: 32px;
+}
+
+.work-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.work-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16), 0 4px 6px rgba(0, 0, 0, 0.24);
+}
+
+.work-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+.work-card-content {
+    padding: 16px;
+}
+
+.work-card h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.work-card-meta {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.work-card-meta i {
+    color: #007BFF;
+    margin-right: 4px;
+}
+
+.work-card-publisher {
+    display: flex;
+    align-items: center;
+}
+
+.work-card-publisher img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.work-card-overlay {
+    position: relative;
+    overflow: hidden;
+}
+
+.work-card-overlay::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: rgba(0, 0, 128, 0.7);
+    transition: height 0.3s ease;
+}
+
+.work-card-overlay:hover::after {
+    height: 100%;
+}
+
+.work-card-overlay button {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    padding: 8px 16px;
+    background-color: white;
+    color: #007BFF;
+    border: none;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.work-card-overlay:hover button {
+    opacity: 1;
+}
+
+/* 分页样式 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.pagination button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 8px;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
+
+.pagination span {
+    margin: 0 16px;
+}
