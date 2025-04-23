@@ -1,21 +1,35 @@
 <template>
   <nav class="flex items-center justify-between px-8 py-4 bg-white shadow-md border-b border-gray-200">
-    <div class="logo">ai-photograph-platform标志</div>
+    <div class="logo font-bold text-2xl text-blue-600 hover:scale-105 transition-transform duration-300">ai-photograph-platform标志</div>
     <ul class="flex items-center space-x-4">
-      <li><router-link to="/">首页</router-link></li>
-      <li><router-link to="/ai">ai</router-link></li>
-      <li><router-link to="/shoot">约拍</router-link></li>
-      <li class="search-container">
+      <li>
+        <router-link to="/" class="text-blue-600 hover:text-blue-800 hover:scale-110 transition-transform duration-300">首页</router-link>
+      </li>
+      <li>
+        <router-link to="/" class="text-blue-600 hover:text-blue-800 hover:scale-110 transition-transform duration-300">ai</router-link>
+      </li>
+      <li>
+        <router-link to="/" class="text-blue-600 hover:text-blue-800 hover:scale-110 transition-transform duration-300">约拍</router-link>
+      </li>
+      <li class="search-container relative flex items-center">
         <input
             type="text"
             placeholder="搜索"
+            class="px-4 py-2 border border-gray-300 rounded-l-md focus:border-blue-600 focus:ring-blue-600 focus:ring-1 outline-none transition-all duration-300"
         />
-        <button class="search-btn">搜索</button>
+        <button class="search-btn px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-800 transition-colors duration-300">
+          <i class="fa-solid fa-magnifying-glass"></i> 搜索
+        </button>
       </li>
-      <li><button class="login-btn">登录</button></li>
-      <li><button class="register-btn">注册</button></li>
+      <li>
+        <button class="login-btn px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 hover:scale-105 transition-all duration-300">登录</button>
+      </li>
+      <li>
+        <button class="register-btn px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 hover:scale-105 transition-all duration-300">注册</button>
+      </li>
     </ul>
   </nav>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -25,7 +39,9 @@ export default {
 </script>
 
 <style scoped>
-/* 可复用 styles.css 中的导航栏样式 */
+/* 引入 Font Awesome 图标库 */
+@import url('https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css');
+
 nav {
   display: flex;
   align-items: center;
