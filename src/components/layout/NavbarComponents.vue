@@ -6,7 +6,7 @@
         <router-link to="/" class="text-blue-600 hover:text-blue-800 hover:scale-110 transition-transform duration-300">首页</router-link>
       </li>
       <li>
-        <router-link to="/" class="text-blue-600 hover:text-blue-800 hover:scale-110 transition-transform duration-300">ai</router-link>
+        <router-link to="/NavbarComponents/AiLayout/AiPhotographyView" class="text-blue-600 hover:text-blue-800 hover:scale-110 transition-transform duration-300">ai</router-link>
       </li>
       <li>
         <router-link to="/" class="text-blue-600 hover:text-blue-800 hover:scale-110 transition-transform duration-300">约拍</router-link>

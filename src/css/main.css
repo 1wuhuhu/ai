@@ -1,0 +1,19 @@
+/* 在main.js中导入 */
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #f43f5e;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --gray: #94a3b8;
+    --success: #10b981;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: #f1f5f9;
+    color: var(--dark);
+}
+
+/* 其他全局样式... */

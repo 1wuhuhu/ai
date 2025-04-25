@@ -1,238 +1,233 @@
 <template>
-  <div class="user-profile-container">
-    <!-- 背景图 -->
-    <div class="header-bg">
-      <img
-          src="https://picsum.photos/1200/200"
-          alt="用户背景图"
-          style="width: 100%; height: 100%; "
-      />
+  <div>
+    <!-- 头图 -->
+    <div class="hero">
+      <img class="avatar" src="https://picsum.photos/150/150" alt="头像">
+      <h1>{{ userNickname }}个人作品集</h1>
     </div>
-    <div class="header-section">
-      <div class="statistic-item">
-        <span class="statistic-label">粉丝</span>
-        <span class="statistic-value">{{ 222 }}</span>
-      </div>
-      <div class="statistic-item">
-        <span class="statistic-label">关注</span>
-        <span class="statistic-value">{{ 111 }}</span>
-      </div>
-      <div class="avatar-container">
-        <el-avatar :size="100" shape="circle" :src="avatarSrc" icon="el-icon-user"></el-avatar>
-      </div>
-      <div class="statistic-item">
-        <span class="statistic-label">原创</span>
-        <span class="statistic-value">{{ 333 }}</span>
-      </div>
-      <div class="statistic-item">
-        <span class="statistic-label">积分</span>
-        <span class="statistic-value">{{ 333 }}</span>
+    <!-- 导航栏 -->
+    <nav>
+      <a href="#">品牌</a>
+      <a href="#">海报</a>
+      <a href="#">UI</a>
+    </nav>
+    <!-- 作品分类展示区 -->
+    <div class="portfolio">
+      <div class="portfolio-card" v-for="(image, index) in portfolioImages" :key="index">
+        <img :src="image" :alt="'作品' + (index + 1)">
+        <h3>作品{{ index + 1 }}</h3>
       </div>
     </div>
-    <div class="user-info-section">
-      <div class="username">{{ 'Windir' }}</div>
-      <div class="user-desc">一枚热爱插画的视觉设计师</div>
-      <div class="action-buttons">
-        <el-button
-            :type="isFollowed? 'info' : 'primary'"
-            :icon="isFollowed? 'el-icon-check' : 'el-icon-plus'"
-            @click="handleFollow"
-        >
-          {{ isFollowed? '已关注' : '关注' }}
-        </el-button>
-        <el-button type="text" icon="el-icon-message" @click="handleMessage">私信</el-button>
-      </div>
+    <!-- 联系表单 -->
+    <div class="contact-form">
+      <h2>联系我们</h2>
+      <form>
+        <input type="text" placeholder="姓名">
+        <input type="email" placeholder="邮箱">
+        <textarea placeholder="需求描述"></textarea>
+        <button type="submit">提交</button>
+      </form>
     </div>
-    <div class="tab-section">
-      <el-tabs v-model="activeTab" type="card">
-        <el-tab-pane label="首页" name="home"> </el-tab-pane>
-        <el-tab-pane label="收藏" name="favorites"> </el-tab-pane>
-        <el-tab-pane label="推荐" name="recommend"> </el-tab-pane>
-        <el-tab-pane label="资料" name="profile"> </el-tab-pane>
-        <el-tab-pane label="评论" name="comments"> </el-tab-pane>
-      </el-tabs>
-    </div>
-    <div class="work-section">
-      <div class="work-count">共上传100组作品</div>
-      <div class="work-list">
-        <div class="work-item" v-for="(index, i) in 4" :key="i">
-          <el-image
-              style="width: 100%; height: 200px"
-              :src="`https://via.placeholder.com/300?text=Work+${i}`"
-              :preview-src-list="['https://via.placeholder.com/300?text=Work+Preview+${i}']"
-          />
-          <div class="work-title">游戏UI设计实训营</div>
-          <div class="work-desc">下一款爆款游戏会是你设计的吗</div>
-          <div class="work-meta">
-            <span>🖐️ 7777</span>
-            <span>👍 7777</span>
-            <span>📌 33333</span>
-          </div>
-          <div class="work-author">
-            <el-avatar size="20" icon="el-icon-user"></el-avatar>
-            <span>Windir</span>
-          </div>
-        </div>
-      </div>
+    <!-- 社交媒体链接 -->
+    <div class="social-media">
+      <a href="#">Facebook</a>
+      <a href="#">Twitter</a>
+      <a href="#">Instagram</a>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { ElAvatar, ElButton, ElImage, ElTabs, ElTabPane } from 'element-plus';
-
-// 模拟用户头像地址，实际使用中替换为真实地址
-const avatarSrc = ref('https://picsum.photos/200');
-
-// 模拟关注状态，实际使用中可以根据接口返回值调整
-const isFollowed = ref(false);
-
-const activeTab = ref('home');
-
-const handleFollow = () => {
-  isFollowed.value =!isFollowed.value;
-  // 这里可以添加实际的关注/取消关注接口调用逻辑
-};
-
-const handleMessage = () => {
-  // 这里可以添加实际的私信跳转或打开聊天窗口逻辑
-  console.log('打开私信功能');
+<script>
+export default {
+  data() {
+    return {
+      userNickname: '动态昵称', // 可根据实际情况修改此昵称
+      portfolioImages: [
+        'https://p3-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/2988c3e31fe68b55e5c789859e778505_1741676608255000828.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212608&x-signature=BGNQKzQHjCUWuP3358I1AuG8AgM%3D',
+        'https://p3-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/a3ffaf4dff67c7e58c4fc885643bc615_1741676772797022643.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212772&x-signature=c6ffRcNU11wWMqNXsms%2F8KDqGBE%3D',
+        'https://p9-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/b5667ae1754a29f6e069cfd812244d33_1741676780503652328.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212780&x-signature=fiTrHsN2qhuOaAzayGVAfUfWkhg%3D',
+        'https://p3-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/43e6290f18ee5bc4903d76f9717a52b6_1741676793075906318.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212793&x-signature=VwCh7DJ6ZqoVBY1rtsp%2FDEpxoZM%3D',
+        'https://p3-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/2da7068d0eccfbd948b49573a898497a_1741676796261828122.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212796&x-signature=uIIiTkeWo8GWGoUoK4Qy4qxBunU%3D',
+        'https://p3-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/6983a7f631da8bd703f55446e97fb67b_1741676814574567326.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212814&x-signature=NAgTrIWKVBnWYFyzSO17BZZM3%2FY%3D',
+        'https://p9-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/29b4f83ce72c120a37ab9c761b0db6d2_1741676819325501108.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212819&x-signature=EsIuTJFNCHlwr9DV80%2BwpxyuqhQ%3D',
+        'https://p3-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/ef992168f008e0c1a1438e57aeeffaa3_1741676842016969033.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212842&x-signature=Mu%2BocIGzO62zBluIFGLH1n6yRmw%3D',
+        'https://p9-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/0a1d13c8aa3e40b71330cf360695d22f_1741676843812404689.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212843&x-signature=%2BzjzO2%2FxNBSr2qX0Av2dX6nBD7E%3D',
+        'https://p3-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/b1f5de2f3e308e5b9d67ddbd194f510b_1741676845622130502.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212845&x-signature=TyicEtBcta4LyPlrM8t%2Be1bZTso%3D'
+      ]
+    };
+  }
 };
 </script>
 
 <style scoped>
-.user-profile-container {
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+/* 全局样式 */
+body {
+  background: linear-gradient(to bottom, #121212, #000);
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Zen Hei', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.header-bg {
+/* 头图样式 */
+.hero {
+  background-image: url('https://p9-flow-imagex-sign.byteimg.com/ocean-cloud-tos/image_generation/eccdf8c573aadd06e328d8851ab0c00f_1741676810548865596.jpeg~tplv-a9rns2rl98-image.jpeg?rk3s=25bff839&x-expires=1773212810&x-signature=2IFyOmdqAXYpcj9n%2F8KfWze%2BW6c%3D');
+  background-size: cover;
+  background-position: center;
+  height: 400px;
   position: relative;
-  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding-left: 50px; /* 整体左移 */
 }
 
-.header-section {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.3);
+.hero::before {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.hero h1 {
+  font-family: 'SF Pro', sans-serif;
+  font-size: 3rem;
   z-index: 1;
-  color: white;
 }
 
-.statistic-item {
-  text-align: center;
+.avatar {
+  width: 150px; /* 放大头像 */
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 1;
 }
 
-.statistic-label {
-  display: block;
-  font-size: 14px;
-  color: #ccc;
-  margin-bottom: 5px;
-}
-
-.statistic-value {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.avatar-container {
-  text-align: center;
-}
-
-.user-info-section {
-  text-align: center;
-  padding: 20px;
-  background-color: white;
-}
-
-.username {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.user-desc {
-  color: #777;
-  margin-bottom: 20px;
-  font-size: 16px;
-}
-
-.action-buttons {
+/* 导航栏样式 */
+nav {
   display: flex;
   justify-content: center;
-}
-
-.action-buttons.el-button {
-  margin: 0 10px;
-}
-
-.tab-section {
-  background-color: white;
-  padding: 10px;
-}
-
-.work-section {
-  padding: 20px;
-}
-
-.work-count {
-  color: #999;
-  margin-bottom: 15px;
-  font-size: 16px;
-  text-align: center;
-}
-
-.work-list {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.work-item {
-  width: calc(25% - 20px);
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-  margin-bottom: 20px;
+  gap: 15px;
   padding: 15px;
+}
+
+nav a {
+  text-decoration: none;
+  color: hsl(210, 100%, 50%); /* 修改按钮文字颜色 */
+  padding: 10px 20px;
+  border: 2px solid hsl(210, 100%, 50%); /* 修改按钮边框颜色 */
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+nav a:hover {
+  border-color: hsl(210, 100%, 70%);
+  color: hsl(210, 100%, 70%);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+nav a:active {
+  background-color: hsl(210, 100%, 20%);
+}
+
+/* 作品分类展示区样式 */
+.portfolio {
+  padding: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.portfolio-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.portfolio-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.portfolio-card h3 {
+  padding: 15px;
+  margin: 0;
+  font-family: 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Zen Hei', sans-serif;
+}
+
+/* 联系表单样式 */
+.contact-form {
+  padding: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
   transition: box-shadow 0.3s ease;
 }
 
-.work-item:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.contact-form input:focus,
+.contact-form textarea:focus {
+  box-shadow: 0 0 0 3px hsl(210, 100%, 50%), 0 0 10px hsl(210, 100%, 50%);
+  animation: breathing 1.5s infinite;
 }
 
-.work-title {
-  font-size: 14px;
-  margin-bottom: 8px;
-  color: #333;
+@keyframes breathing {
+  0% {
+    box-shadow: 0 0 0 3px hsl(210, 100%, 50%), 0 0 10px hsl(210, 100%, 50%);
+  }
+  50% {
+    box-shadow: 0 0 0 6px hsl(210, 100%, 50%), 0 0 20px hsl(210, 100%, 50%);
+  }
+  100% {
+    box-shadow: 0 0 0 3px hsl(210, 100%, 50%), 0 0 10px hsl(210, 100%, 50%);
+  }
 }
 
-.work-desc {
-  color: #777;
-  font-size: 12px;
-  margin-bottom: 10px;
+.contact-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: hsl(210, 100%, 50%);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
 }
 
-.work-meta {
-  font-size: 12px;
-  color: #999;
-  margin-bottom: 10px;
-}
-
-.work-author {
+/* 社交媒体链接样式 */
+.social-media {
   display: flex;
-  align-items: center;
-  font-size: 12px;
-  color: #999;
+  justify-content: center;
+  gap: 15px;
+  padding: 15px;
+}
+
+.social-media a {
+  color: #fff;
+  font-size: 24px;
+  transition: transform 0.3s ease;
+}
+
+.social-media a:hover {
+  transform: rotate(15deg);
 }
 </style>

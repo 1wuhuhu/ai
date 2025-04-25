@@ -1,86 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router';
-// import NavbarComponents from '../components/NavbarComponents.vue';
-// import CarouselComponents from '../components/CarouselComponents.vue';
-// import WorksGridComponents from '../components/WorksGridComponents.vue';
-// import PaginationComponents from '../components/PaginationComponents.vue';
+import { createRouter, createWebHistory } from 'vue-router'
 
-// const routes = [
-//     {
-//         path: '/',
-//         components: {
-//             default: () => ({
-//                 template: `
-//                   <div>
-//                   <CarouselComponents />
-//                   <WorksGridComponents :recommendedWorks="recommendedWorks" :currentPage="currentPage" :itemsPerPage="itemsPerPage" />
-//                   <PaginationComponents :currentPage="currentPage" :totalPages="totalPages" @prevPage="prevPage" @nextPage="nextPage" />
-//                   </div>
-//                 `,
-//                 components: { CarouselComponents, WorksGridComponents, PaginationComponents },
-//                 data() {
-//                     return {
-//                         recommendedWorks: [
-//                             {
-//                                 imageUrl: "https://picsum.photos/200/200",
-//                                 title: "作品标题 1",
-//                                 likes: 100,
-//                                 comments: 20,
-//                                 publisherName: "发布者昵称 1",
-//                                 publisherAvatar: "https://picsum.photos/50/50"
-//                             },
-//                             {
-//                                 imageUrl: "https://picsum.photos/201/200",
-//                                 title: "作品标题 2",
-//                                 likes: 120,
-//                                 comments: 30,
-//                                 publisherName: "发布者昵称 2",
-//                                 publisherAvatar: "https://picsum.photos/50/51"
-//                             },
-//                             {
-//                                 imageUrl: "https://picsum.photos/202/200",
-//                                 title: "作品标题 3",
-//                                 likes: 80,
-//                                 comments: 15,
-//                                 publisherName: "发布者昵称 3",
-//                                 publisherAvatar: "https://picsum.photos/50/52"
-//                             },
-//                             {
-//                                 imageUrl: "https://picsum.photos/203/200",
-//                                 title: "作品标题 4",
-//                                 likes: 150,
-//                                 comments: 40,
-//                                 publisherName: "发布者昵称 4",
-//                                 publisherAvatar: "https://picsum.photos/50/53"
-//                             }
-//                         ],
-//                         currentPage: 1,
-//                         itemsPerPage: 24
-//                     };
-//                 },
-//                 computed: {
-//                     totalPages() {
-//                         return Math.ceil(this.recommendedWorks.length / this.itemsPerPage);
-//                     }
-//                 },
-//                 methods: {
-//                     prevPage() {
-//                         if (this.currentPage > 1) {
-//                             this.currentPage--;
-//                         }
-//                     },
-//                     nextPage() {
-//                         if (this.currentPage < this.totalPages) {
-//                             this.currentPage++;
-//                         }
-//                     }
-//                 }
-//             }),
-//             NavbarComponents
-//         }
-//     }
-// ];
-
-const routes=[
+const routes = [
     {
         path: "/",
         name: "root",
@@ -88,14 +8,13 @@ const routes=[
     },
     {
         path: "/login",
-        name:"login",
-        component: () => import('@/views/loginPage')
+        name: "login",
+        component: () => import('@/views/loginPage.vue')
     },
-    {},
     {
         path: "/NavbarComponents",
         name: "NavbarComponents",
-        component: () => import('@/components/NavbarComponents.vue'),
+        component: () => import('@/components/layout/NavbarComponents.vue'),
         children: [
             {
                 path: "homePage",
@@ -105,16 +24,50 @@ const routes=[
             {
                 path: "userDetails",
                 name: "userDetails",
-                component: () => import('@/views/userDetailsPage')
+                component: () => import('@/views/userDetailsPage.vue')
+            },
+            {
+                path: "AiLayout",
+                name: "AiLayout",
+                component: () => import('@/components/layout/AiLayout.vue'),
+                meta: { isAIModule: true },
+                children: [
+                    {
+                        path: "AiPhotographyView",
+                        name: "AiPhotographyView",
+                        component: () => import('@/views/AiPhotographyView.vue'),
+                        meta: {
+                            title: '摄影老炮',
+                            icon: 'fas fa-camera-retro'
+                        }
+                    },
+                    {
+                        path: "SuperResolutionView",
+                        name: "SuperResolutionView",
+                        component: () => import('@/views/SuperResolutionView.vue'),
+                        meta: {
+                            title: '超分辨率',
+                            icon: 'fas fa-search-plus'
+                        }
+                    },
+                    {
+                        path: "AiBeautyView",
+                        name: "AiBeautyView",
+                        component: () => import('@/views/AiBeautyView.vue'),
+                        meta: {
+                            title: 'AI美颜',
+                            icon: 'fas fa-magic'
+                        }
+                    }
+                ]
             }
         ]
     }
-
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     routes
-});
+})
 
-export default router;
+export default router

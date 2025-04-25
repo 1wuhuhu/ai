@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">Click on button in image container</p>
-    <div class="cont">
+    <div class="cont" ref="contRef">
       <div class="form sign-in">
         <h2>Welcome back,</h2>
         <label>
@@ -26,7 +26,7 @@
             <h2>One of us?</h2>
             <p>If you already has an account, just sign in. We've missed you!</p>
           </div>
-          <div class="img__btn">
+          <div class="img__btn" @click="toggleSignUp">
             <span class="m--up">Sign Up</span>
             <span class="m--in">Sign In</span>
           </div>
@@ -50,7 +50,6 @@
         </div>
       </div>
     </div>
-
     <a href="https://dribbble.com/shots/3306190-Login-Registration-form" target="_blank" class="icon-link">
       <img src="http://icons.iconarchive.com/icons/uiconstock/socialmedia/256/Dribbble-icon.png">
     </a>
@@ -61,24 +60,24 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'LoginRegistrationForm',
-  data() {
-    return {
-      isSignUp: false
-    };
-  },
-  methods: {
-    toggleSignUp() {
-      this.isSignUp =!this.isSignUp;
-    }
-  }
+<script setup>
+import { ref, onMounted } from 'vue';
 
+const contRef = ref(null);
+
+const toggleSignUp = () => {
+  if (contRef.value) {
+    contRef.value.classList.toggle('s--signup');
+  }
 };
+
+onMounted(() => {
+  // 确保在组件挂载后 contRef 已经正确绑定到元素
+  console.log('Cont element:', contRef.value);
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 *,
 *:before,
 *:after {
@@ -135,6 +134,10 @@ button {
   transition: transform 1.2s ease-in-out;
 }
 
+.cont.s--signup .sub-cont {
+  transform: translate3d(-640px, 0, 0);
+}
+
 button {
   display: block;
   margin: 0 auto;
@@ -179,6 +182,10 @@ button {
   background: rgba(0, 0, 0, 0.6);
 }
 
+.cont.s--signup .img:before {
+  transform: translate3d(640px, 0, 0);
+}
+
 .img__text {
   z-index: 2;
   position: absolute;
@@ -199,6 +206,22 @@ button {
 .img__text p {
   font-size: 14px;
   line-height: 1.5;
+}
+
+.img__text.m--up {
+  transform: translateX(0);
+}
+
+.cont.s--signup .img__text.m--up {
+  transform: translateX(520px);
+}
+
+.img__text.m--in {
+  transform: translateX(-520px);
+}
+
+.cont.s--signup .img__text.m--in {
+  transform: translateX(0);
 }
 
 .img__btn {
@@ -237,6 +260,22 @@ button {
   width: 100%;
   height: 100%;
   transition: transform 1.2s;
+}
+
+.img__btn span.m--in {
+  transform: translateY(-72px);
+}
+
+.cont.s--signup .img__btn span.m--in {
+  transform: translateY(0);
+}
+
+.img__btn span.m--up {
+  transform: translateY(0);
+}
+
+.cont.s--signup .img__btn span.m--up {
+  transform: translateY(72px);
 }
 
 h2 {
@@ -284,38 +323,30 @@ input {
 
 .fb-btn {
   border: 2px solid #d3dae9;
-  color: darken(#d3dae9, 20%);
+  color: #a8b6d1;
 }
 
 .fb-btn span {
   font-weight: bold;
-  color: darken(#768cb6, 20%);
+  color: #5d74a6;
 }
 
-.sign-in.transformed {
-  transform: translate3d(640px, 0, 0);
+.sign-in {
+  transition-timing-function: ease-out;
+}
+
+.cont.s--signup .sign-in {
   transition-timing-function: ease-in-out;
   transition-duration: 1.2s;
+  transform: translate3d(640px, 0, 0);
 }
 
-.sign-up.transformed {
+.sign-up {
+  transform: translate3d(-900px, 0, 0);
+}
+
+.cont.s--signup .sign-up {
   transform: translate3d(0, 0, 0);
-}
-
-.img__text.m--up.transformed {
-  transform: translateX(520px);
-}
-
-.img__text.m--in.transformed {
-  transform: translateX(0);
-}
-
-.img__btn span.m--in.transformed {
-  transform: translateY(0);
-}
-
-.img__btn span.m--up.transformed {
-  transform: translateY(72px);
 }
 
 .icon-link {
@@ -330,7 +361,7 @@ input {
   vertical-align: top;
 }
 
-.icon-link.icon-link--twitter {
+.icon-link--twitter {
   left: auto;
   right: 5px;
 }
