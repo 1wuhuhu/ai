@@ -9,7 +9,7 @@ const routes = [
     {
         path: "/login",
         name: "login",
-        component: () => import('@/views/loginPage.vue')
+        component: () => import('@/views/loginView.vue')
     },
     {
         path: "/NavbarComponents",
@@ -19,12 +19,32 @@ const routes = [
             {
                 path: "homePage",
                 name: "homePage",
-                component: () => import('@/views/homePage.vue'),
+                component: () => import('@/views/homeView.vue'),
             },
             {
                 path: "userDetails",
                 name: "userDetails",
-                component: () => import('@/views/userDetailsPage.vue')
+                component: () => import('@/views/userDetailsView.vue')
+            },
+            {
+                path: "WorkList"  ,
+                name:"WorkList",
+                component: () => import('@/views/WorkListView')
+            },
+            {
+                path: "UserEdit" ,
+                name: "UserEdit",
+                component: () => import('@/views/UserEditView')
+            },
+            {
+                path:"UploadWork"  ,
+                name:"UploadWork",
+                component: () => import('@/views/UploadWorkView')
+            },
+            {
+                path: "WorkDetails",
+                name: "WorkDetails",
+                component: () =>import('@/views/WorkDetailsView')
             },
             {
                 path: "AiLayout",

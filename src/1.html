@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI摄影平台 | 智能摄影助手</title>
+    <title>摄影集 - 作品展示</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #f43f5e;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --gray: #94a3b8;
-            --success: #10b981;
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #f72585;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --border-radius: 12px;
+            --shadow: 0 8px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * {
@@ -24,1091 +27,663 @@
         }
 
         body {
-            background-color: #f1f5f9;
+            background-color: var(--light);
+            padding: 2rem;
             color: var(--dark);
+        }
+
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 头部样式 */
+        .gallery-header {
             display: flex;
-            min-height: 100vh;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .gallery-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .gallery-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 80%;
+            background: var(--primary);
+            border-radius: 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius);
+            border: none;
+            background: white;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+        }
+
+        .filter-btn i {
+            font-size: 0.9rem;
+        }
+
+        /* 作品网格 */
+        .artwork-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .artwork-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .artwork-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        }
+
+        .artwork-image-container {
+            position: relative;
+            width: 100%;
+            height: 240px;
             overflow: hidden;
         }
 
-        /* 左侧导航栏 */
-        .sidebar {
-            width: 280px;
-            background: white;
-            border-right: 1px solid #e2e8f0;
-            height: 100vh;
-            padding: 20px 0;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-            z-index: 10;
+        .artwork-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            padding: 0 20px 20px;
-            border-bottom: 1px solid #e2e8f0;
-            margin-bottom: 20px;
+        .artwork-card:hover .artwork-image {
+            transform: scale(1.05);
         }
 
-        .logo img {
-            width: 36px;
-            height: 36px;
-            margin-right: 10px;
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            margin: 4px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--gray);
-            font-weight: 500;
-        }
-
-        .nav-item:hover {
-            background-color: #f1f5f9;
-            color: var(--primary);
-        }
-
-        .nav-item.active {
-            background-color: #eef2ff;
-            color: var(--primary);
+        .artwork-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.9);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: 600;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 1;
         }
 
-        .nav-item i {
+        /* 不同分类的徽章颜色 */
+        .badge-portrait {
+            background: rgba(255,105,180,0.9);
+            color: white;
+        }
+
+        .badge-landscape {
+            background: rgba(100,200,100,0.9);
+            color: white;
+        }
+
+        .badge-culture {
+            background: rgba(255,165,0,0.9);
+            color: white;
+        }
+
+        .badge-news {
+            background: rgba(70,130,180,0.9);
+            color: white;
+        }
+
+        .badge-animal {
+            background: rgba(147,112,219,0.9);
+            color: white;
+        }
+
+        .artwork-info {
+            padding: 1.5rem;
+        }
+
+        .artwork-title {
             font-size: 1.1rem;
-            margin-right: 12px;
-            width: 24px;
-            text-align: center;
-        }
-
-        .user-section {
-            margin-top: auto;
-            padding: 20px;
-            border-top: 1px solid #e2e8f0;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 3em;
+            line-height: 1.5em;
         }
 
         .user-info {
             display: flex;
             align-items: center;
+            margin-bottom: 1.2rem;
+            gap: 0.8rem;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 12px;
-        }
-
-        /* 主内容区 */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .top-bar {
-            height: 60px;
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            padding: 0 24px;
-            justify-content: space-between;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: #f8fafc;
-            border-radius: 8px;
-            padding: 8px 12px;
-            width: 300px;
-        }
-
-        .search-bar input {
-            border: none;
-            background: transparent;
-            margin-left: 8px;
-            width: 100%;
-            outline: none;
-            color: var(--dark);
-        }
-
-        .search-bar i {
-            color: var(--gray);
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .notification-badge {
-            position: relative;
-        }
-
-        .badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background-color: var(--secondary);
-            color: white;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* 功能区域 */
-        .function-area {
-            flex: 1;
-            padding: 24px;
-            overflow-y: auto;
-            background: #f8fafc;
-        }
-
-        .function-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .function-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        .function-desc {
-            color: var(--gray);
-            margin-top: 4px;
-        }
-
-        /* 对话卡片 */
-        .chat-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            height: calc(100% - 60px);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .message {
-            margin-bottom: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .message-user {
-            align-items: flex-end;
-        }
-
-        .message-ai {
-            align-items: flex-start;
-        }
-
-        .message-content {
-            max-width: 70%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            line-height: 1.5;
-        }
-
-        .user-message {
-            background-color: var(--primary);
-            color: white;
-            border-top-right-radius: 4px !important;
-        }
-
-        .ai-message {
-            background-color: #f1f5f9;
-            color: var(--dark);
-            border-top-left-radius: 4px !important;
-        }
-
-        .message-meta {
-            font-size: 0.75rem;
-            color: var(--gray);
-            margin-top: 4px;
-        }
-
-        /* 输入区域 */
-        .input-area {
-            padding: 16px;
-            border-top: 1px solid #e2e8f0;
-            background: white;
-        }
-
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            background: #f8fafc;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-
-        .input-tools {
-            display: flex;
-            padding: 8px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .tool-button {
-            background: transparent;
-            border: none;
-            color: var(--gray);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .tool-button:hover {
-            background: #e2e8f0;
-            color: var(--primary);
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .attachments-container {
-            padding: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        .attachment-item {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-
-        .attachment-item img {
-            width: 100%;
-            height: 100%;
             object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: var(--transition);
         }
 
-        .attachment-remove {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 10px;
+        .artwork-card:hover .user-avatar {
+            transform: scale(1.1);
         }
 
-        .input-box-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .input-box {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            outline: none;
-            background: transparent;
-            resize: none;
-            min-height: 50px;
-            max-height: 150px;
+        .username {
+            font-size: 0.9rem;
+            font-weight: 500;
             color: var(--dark);
         }
 
-        .send-button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0 16px;
-            height: 50px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .send-button:hover {
-            background: var(--primary-dark);
-        }
-
-        /* 上传区域 */
-        .upload-area {
+        .artwork-stats {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 0.8rem;
+        }
+
+        .stat {
+            display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 40px;
-            border: 2px dashed #e2e8f0;
-            border-radius: 12px;
-            margin-top: 20px;
-            background: white;
+            gap: 0.3rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
         }
 
-        .upload-area:hover {
-            border-color: var(--primary);
-        }
-
-        .upload-icon {
-            font-size: 2rem;
+        .stat:hover {
+            background: rgba(67, 97, 238, 0.1);
             color: var(--primary);
-            margin-bottom: 16px;
         }
 
-        .upload-text {
-            font-size: 1rem;
-            color: var(--gray);
-            margin-bottom: 8px;
+        .stat i {
+            font-size: 0.9rem;
         }
 
-        .upload-hint {
-            font-size: 0.875rem;
-            color: var(--gray);
+        .stat.liked {
+            color: var(--secondary);
         }
 
-        /* 图片处理选项 */
-        .options-panel {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .option-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--dark);
-        }
-
-        .option-group {
-            margin-bottom: 16px;
-        }
-
-        .slider-container {
+        /* 分页 */
+        .pagination {
             display: flex;
-            align-items: center;
-            gap: 12px;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
         }
 
-        .slider {
-            flex: 1;
-            -webkit-appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: #e2e8f0;
-            outline: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-        }
-
-        .slider-value {
-            width: 40px;
-            text-align: center;
-            font-size: 0.875rem;
-            color: var(--dark);
-        }
-
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            background: #f1f5f9;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .checkbox-item:hover {
-            background: #e2e8f0;
-        }
-
-        .checkbox-item input {
-            margin-right: 6px;
-        }
-
-        .process-button {
-            background: var(--primary);
-            color: white;
+        .page-btn {
+            width: 42px;
+            height: 42px;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-            margin-top: 16px;
-        }
-
-        .process-button:hover {
-            background: var(--primary-dark);
-        }
-
-        /* 结果展示 */
-        .result-container {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .image-comparison {
-            flex: 1;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .image-comparison img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .comparison-slider {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 4px;
             background: white;
-            left: 50%;
-            transform: translateX(-50%);
-            cursor: ew-resize;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .download-button {
+            color: var(--gray);
+            border-radius: var(--border-radius);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .download-button:hover {
-            opacity: 0.9;
+        .page-btn:hover:not(.active):not(.disabled) {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+        }
+
+        .page-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 加载更多 */
+        .load-more {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .load-more-btn {
+            padding: 0.8rem 2rem;
+            background: white;
+            border: none;
+            border-radius: var(--border-radius);
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .load-more-btn:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
         }
 
         /* 响应式设计 */
         @media (max-width: 768px) {
-            .sidebar {
-                width: 80px;
+            body {
+                padding: 1rem;
             }
-            .nav-item span {
-                display: none;
+
+            .artwork-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.2rem;
             }
-            .nav-item i {
-                margin-right: 0;
-                font-size: 1.3rem;
+
+            .artwork-image-container {
+                height: 200px;
             }
-            .logo h1 {
-                display: none;
+        }
+
+        @media (max-width: 480px) {
+            .gallery-header {
+                flex-direction: column;
+                align-items: flex-start;
             }
-            .user-info .user-name {
-                display: none;
+
+            .filters {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+            }
+
+            .filter-btn {
+                flex-shrink: 0;
             }
         }
     </style>
 </head>
 <body>
-<!-- 左侧导航栏 -->
-<div class="sidebar">
-    <div class="logo">
-        <img src="https://via.placeholder.com/36" alt="AI摄影平台">
-        <h1>AI摄影平台</h1>
-    </div>
-
-    <div class="nav-items">
-        <div class="nav-item active">
-            <i class="fas fa-camera-retro"></i>
-            <span>摄影老炮</span>
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-search-plus"></i>
-            <span>超分辨率</span>
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-magic"></i>
-            <span>AI美颜</span>
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h1 class="gallery-title">摄影集</h1>
+        <div class="filters">
+            <button class="filter-btn active"><i class="fas fa-th-large"></i> 全部</button>
+            <button class="filter-btn"><i class="fas fa-user"></i> 人像</button>
+            <button class="filter-btn"><i class="fas fa-mountain"></i> 风光</button>
+            <button class="filter-btn"><i class="fas fa-users"></i> 人文</button>
+            <button class="filter-btn"><i class="fas fa-newspaper"></i> 新闻</button>
+            <button class="filter-btn"><i class="fas fa-paw"></i> 动物</button>
         </div>
     </div>
 
-    <div class="user-section">
-        <div class="user-info">
-            <div class="user-avatar">U</div>
-            <div class="user-name">用户名</div>
+    <div class="artwork-grid">
+        <!-- 作品1 - 人像 -->
+        <div class="artwork-card">
+            <div class="artwork-image-container">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" alt="人像摄影" class="artwork-image">
+                <span class="artwork-badge badge-portrait">人像</span>
+            </div>
+            <div class="artwork-info">
+                <h3 class="artwork-title">城市街头肖像 - 光影交错的黑白人像</h3>
+                <div class="user-info">
+                    <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="用户头像" class="user-avatar">
+                    <span class="username">人像摄影师James</span>
+                </div>
+                <div class="artwork-stats">
+                    <div class="stat"><i class="fas fa-eye"></i> 3.2k</div>
+                    <div class="stat"><i class="fas fa-heart"></i> 856</div>
+                    <div class="stat"><i class="fas fa-comment"></i> 92</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 作品2 - 风光 -->
+        <div class="artwork-card">
+            <div class="artwork-image-container">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="风光摄影" class="artwork-image">
+                <span class="artwork-badge badge-landscape">风光</span>
+            </div>
+            <div class="artwork-info">
+                <h3 class="artwork-title">落基山脉日出 - 长曝光风光摄影</h3>
+                <div class="user-info">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="用户头像" class="user-avatar">
+                    <span class="username">风光摄影师Sarah</span>
+                </div>
+                <div class="artwork-stats">
+                    <div class="stat"><i class="fas fa-eye"></i> 5.7k</div>
+                    <div class="stat"><i class="fas fa-heart"></i> 1.4k</div>
+                    <div class="stat"><i class="fas fa-comment"></i> 128</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 作品3 - 人文 -->
+        <div class="artwork-card">
+            <div class="artwork-image-container">
+                <img src="https://images.unsplash.com/photo-1527689368864-3a821dbccc34" alt="人文摄影" class="artwork-image">
+                <span class="artwork-badge badge-culture">人文</span>
+            </div>
+            <div class="artwork-info">
+                <h3 class="artwork-title">市集生活 - 东南亚传统市场纪实</h3>
+                <div class="user-info">
+                    <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="用户头像" class="user-avatar">
+                    <span class="username">纪实摄影师Robert</span>
+                </div>
+                <div class="artwork-stats">
+                    <div class="stat"><i class="fas fa-eye"></i> 2.8k</div>
+                    <div class="stat"><i class="fas fa-heart"></i> 723</div>
+                    <div class="stat"><i class="fas fa-comment"></i> 64</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 作品4 - 新闻 -->
+        <div class="artwork-card">
+            <div class="artwork-image-container">
+                <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1" alt="新闻摄影" class="artwork-image">
+                <span class="artwork-badge badge-news">新闻</span>
+            </div>
+            <div class="artwork-info">
+                <h3 class="artwork-title">城市抗议现场 - 新闻纪实摄影</h3>
+                <div class="user-info">
+                    <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="用户头像" class="user-avatar">
+                    <span class="username">新闻记者Emily</span>
+                </div>
+                <div class="artwork-stats">
+                    <div class="stat"><i class="fas fa-eye"></i> 4.5k</div>
+                    <div class="stat class="liked"><i class="fas fa-heart"></i> 1.1k</div>
+                <div class="stat"><i class="fas fa-comment"></i> 156</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作品5 - 动物 -->
+    <div class="artwork-card">
+        <div class="artwork-image-container">
+            <img src="https://images.unsplash.com/photo-1474511320723-9a56873867b5" alt="动物摄影" class="artwork-image">
+            <span class="artwork-badge badge-animal">动物</span>
+        </div>
+        <div class="artwork-info">
+            <h3 class="artwork-title">草原之王 - 非洲狮子特写</h3>
+            <div class="user-info">
+                <img src="https://randomuser.me/api/portraits/men/77.jpg" alt="用户头像" class="user-avatar">
+                <span class="username">野生动物摄影师Tom</span>
+            </div>
+            <div class="artwork-stats">
+                <div class="stat"><i class="fas fa-eye"></i> 6.3k</div>
+                <div class="stat"><i class="fas fa-heart"></i> 2.1k</div>
+                <div class="stat"><i class="fas fa-comment"></i> 187</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作品6 - 人像 -->
+    <div class="artwork-card">
+        <div class="artwork-image-container">
+            <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" alt="人像摄影" class="artwork-image">
+            <span class="artwork-badge badge-portrait">人像</span>
+        </div>
+        <div class="artwork-info">
+            <h3 class="artwork-title">芭蕾舞者 - 舞台人像摄影</h3>
+            <div class="user-info">
+                <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="用户头像" class="user-avatar">
+                <span class="username">艺术摄影师Anna</span>
+            </div>
+            <div class="artwork-stats">
+                <div class="stat"><i class="fas fa-eye"></i> 3.9k</div>
+                <div class="stat"><i class="fas fa-heart"></i> 1.3k</div>
+                <div class="stat"><i class="fas fa-comment"></i> 98</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作品7 - 风光 -->
+    <div class="artwork-card">
+        <div class="artwork-image-container">
+            <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" alt="风光摄影" class="artwork-image">
+            <span class="artwork-badge badge-landscape">风光</span>
+        </div>
+        <div class="artwork-info">
+            <h3 class="artwork-title">挪威峡湾 - 极光与星空长曝光</h3>
+            <div class="user-info">
+                <img src="https://randomuser.me/api/portraits/men/88.jpg" alt="用户头像" class="user-avatar">
+                <span class="username">风光摄影师Lars</span>
+            </div>
+            <div class="artwork-stats">
+                <div class="stat"><i class="fas fa-eye"></i> 7.2k</div>
+                <div class="stat"><i class="fas fa-heart"></i> 2.5k</div>
+                <div class="stat"><i class="fas fa-comment"></i> 214</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作品8 - 人文 -->
+    <div class="artwork-card">
+        <div class="artwork-image-container">
+            <img src="https://images.unsplash.com/photo-1522206024047-9c925421675b" alt="人文摄影" class="artwork-image">
+            <span class="artwork-badge badge-culture">人文</span>
+        </div>
+        <div class="artwork-info">
+            <h3 class="artwork-title">街头艺人 - 城市文化纪实</h3>
+            <div class="user-info">
+                <img src="https://randomuser.me/api/portraits/women/66.jpg" alt="用户头像" class="user-avatar">
+                <span class="username">街头摄影师Mia</span>
+            </div>
+            <div class="artwork-stats">
+                <div class="stat"><i class="fas fa-eye"></i> 2.1k</div>
+                <div class="stat"><i class="fas fa-heart"></i> 543</div>
+                <div class="stat"><i class="fas fa-comment"></i> 47</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作品9 - 新闻 -->
+    <div class="artwork-card">
+        <div class="artwork-image-container">
+            <img src="https://images.unsplash.com/photo-1495563381401-ecfbcaaa60f2" alt="新闻摄影" class="artwork-image">
+            <span class="artwork-badge badge-news">新闻</span>
+        </div>
+        <div class="artwork-info">
+            <h3 class="artwork-title">消防员救援 - 突发事件现场</h3>
+            <div class="user-info">
+                <img src="https://randomuser.me/api/portraits/men/99.jpg" alt="用户头像" class="user-avatar">
+                <span class="username">新闻摄影师David</span>
+            </div>
+            <div class="artwork-stats">
+                <div class="stat"><i class="fas fa-eye"></i> 8.6k</div>
+                <div class="stat"><i class="fas fa-heart"></i> 3.2k</div>
+                <div class="stat"><i class="fas fa-comment"></i> 276</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作品10 - 动物 -->
+    <div class="artwork-card">
+        <div class="artwork-image-container">
+            <img src="https://images.unsplash.com/photo-1452570053594-1b985d6ea890" alt="动物摄影" class="artwork-image">
+            <span class="artwork-badge badge-animal">动物</span>
+        </div>
+        <div class="artwork-info">
+            <h3 class="artwork-title">雪豹 - 喜马拉雅山脉珍稀动物</h3>
+            <div class="user-info">
+                <img src="https://randomuser.me/api/portraits/women/77.jpg" alt="用户头像" class="user-avatar">
+                <span class="username">野生动物摄影师Lisa</span>
+            </div>
+            <div class="artwork-stats">
+                <div class="stat"><i class="fas fa-eye"></i> 9.4k</div>
+                <div class="stat"><i class="fas fa-heart"></i> 4.1k</div>
+                <div class="stat"><i class="fas fa-comment"></i> 342</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作品11 - 人像 -->
+    <div class="artwork-card">
+        <div class="artwork-image-container">
+            <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df" alt="人像摄影" class="artwork-image">
+            <span class="artwork-badge badge-portrait">人像</span>
+        </div>
+        <div class="artwork-info">
+            <h3 class="artwork-title">孕妇写真 - 自然光人像摄影</h3>
+            <div class="user-info">
+                <img src="https://randomuser.me/api/portraits/women/88.jpg" alt="用户头像" class="user-avatar">
+                <span class="username">人像摄影师Sophia</span>
+            </div>
+            <div class="artwork-stats">
+                <div class="stat"><i class="fas fa-eye"></i> 3.5k</div>
+                <div class="stat"><i class="fas fa-heart"></i> 987</div>
+                <div class="stat"><i class="fas fa-comment"></i> 112</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作品12 - 风光 -->
+    <div class="artwork-card">
+        <div class="artwork-image-container">
+            <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05" alt="风光摄影" class="artwork-image">
+            <span class="artwork-badge badge-landscape">风光</span>
+        </div>
+        <div class="artwork-info">
+            <h3 class="artwork-title">迷雾森林 - 清晨自然风光</h3>
+            <div class="user-info">
+                <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="用户头像" class="user-avatar">
+                <span class="username">自然摄影师Carl</span>
+            </div>
+            <div class="artwork-stats">
+                <div class="stat"><i class="fas fa-eye"></i> 4.8k</div>
+                <div class="stat"><i class="fas fa-heart"></i> 1.7k</div>
+                <div class="stat"><i class="fas fa-comment"></i> 143</div>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- 主内容区 -->
-<div class="main-content">
-    <div class="top-bar">
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="搜索功能或帮助...">
-        </div>
-        <div class="user-actions">
-            <div class="notification-badge">
-                <i class="fas fa-bell"></i>
-                <span class="badge">3</span>
-            </div>
-            <i class="fas fa-cog"></i>
-        </div>
-    </div>
+<div class="pagination">
+    <button class="page-btn disabled"><i class="fas fa-chevron-left"></i></button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">3</button>
+    <button class="page-btn">4</button>
+    <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+</div>
 
-    <div class="function-area">
-        <!-- 摄影老炮功能 -->
-        <div class="function-header">
-            <div>
-                <h2 class="function-title">摄影老炮</h2>
-                <p class="function-desc">多模态AI摄影助手，为您提供专业建议</p>
-            </div>
-        </div>
-
-        <div class="chat-container">
-            <div class="chat-messages">
-                <div class="message message-ai">
-                    <div class="message-content ai-message">
-                        您好！我是您的AI摄影助手，可以为您提供：
-                        <ul style="margin-top: 8px; padding-left: 20px;">
-                            <li>摄影参数建议</li>
-                            <li>构图分析</li>
-                            <li>风格模仿</li>
-                            <li>后期处理指导</li>
-                        </ul>
-                        请上传照片或描述您的需求。
-                    </div>
-                    <div class="message-meta">AI助手 · 刚刚</div>
-                </div>
-
-                <div class="message message-user">
-                    <div class="message-content user-message">
-                        这张照片的光线怎么样？如何改进？
-                    </div>
-                    <div class="message-meta">您 · 1分钟前</div>
-                </div>
-
-                <div class="message message-ai">
-                    <div class="message-content ai-message">
-                        <div style="display: flex; gap: 16px; margin-bottom: 12px;">
-                            <img src="https://via.placeholder.com/150" alt="示例照片" style="border-radius: 8px; width: 150px;">
-                            <div>
-                                <p>您照片的光线对比度较高，建议：</p>
-                                <ol style="margin-top: 8px; padding-left: 20px;">
-                                    <li>使用反光板补光阴影部分</li>
-                                    <li>将ISO从800降至400减少噪点</li>
-                                    <li>尝试在黄金时段拍摄</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="message-meta">AI助手 · 刚刚</div>
-                </div>
-
-                <!-- 带附件的用户消息示例 -->
-                <div class="message message-user">
-                    <div class="message-content user-message">
-                        <div style="margin-bottom: 8px;">请帮我分析这张照片的构图</div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <div class="attachment-item">
-                                <img src="https://via.placeholder.com/150" alt="上传的图片">
-                                <button class="attachment-remove">&times;</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="message-meta">您 · 刚刚</div>
-                </div>
-            </div>
-
-            <div class="input-area">
-                <div class="input-container">
-                    <div class="input-tools">
-                        <label for="file-upload" class="tool-button" title="上传图片">
-                            <i class="fas fa-image"></i>
-                            <input id="file-upload" type="file" accept="image/*" class="file-input" multiple>
-                        </label>
-                        <button class="tool-button" title="帮助"><i class="fas fa-question-circle"></i></button>
-                    </div>
-
-                    <div class="attachments-container" id="attachments-preview">
-                        <!-- 附件预览将在这里动态生成 -->
-                    </div>
-
-                    <div class="input-box-container">
-                        <textarea class="input-box" id="message-input" placeholder="输入您的问题或指令..."></textarea>
-                        <button class="send-button" id="send-button"><i class="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="load-more">
+    <button class="load-more-btn">
+        <i class="fas fa-plus"></i> 加载更多作品
+    </button>
+</div>
 </div>
 
 <script>
-    // 简单的导航切换功能
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', function() {
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            this.classList.add('active');
-
-            // 这里可以添加切换功能模块的逻辑
-            const moduleName = this.querySelector('span').textContent;
-            console.log(`切换到${moduleName}模块`);
-        });
-    });
-
-    // 图片上传和预览功能
-    const fileInput = document.getElementById('file-upload');
-    const attachmentsPreview = document.getElementById('attachments-preview');
-    const messageInput = document.getElementById('message-input');
-    const sendButton = document.getElementById('send-button');
-
-    let uploadedFiles = [];
-
-    fileInput.addEventListener('change', function(e) {
-        const files = Array.from(e.target.files);
-
-        files.forEach(file => {
-            if (!file.type.match('image.*')) {
-                alert('请上传图片文件');
-                return;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                const fileData = {
-                    name: file.name,
-                    size: file.size,
-                    type: file.type,
-                    data: e.target.result
-                };
-
-                uploadedFiles.push(fileData);
-                updateAttachmentsPreview();
-            };
-
-            reader.readAsDataURL(file);
-        });
-
-        // 重置input，允许重复选择同一文件
-        fileInput.value = '';
-    });
-
-    function updateAttachmentsPreview() {
-        attachmentsPreview.innerHTML = '';
-
-        uploadedFiles.forEach((file, index) => {
-            const attachmentItem = document.createElement('div');
-            attachmentItem.className = 'attachment-item';
-            attachmentItem.innerHTML = `
-                    <img src="${file.data}" alt="${file.name}">
-                    <button class="attachment-remove" data-index="${index}">&times;</button>
-                `;
-            attachmentsPreview.appendChild(attachmentItem);
-        });
-
-        // 添加删除事件
-        document.querySelectorAll('.attachment-remove').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const index = parseInt(this.getAttribute('data-index'));
-                uploadedFiles.splice(index, 1);
-                updateAttachmentsPreview();
+    // 简单的交互功能
+    document.addEventListener('DOMContentLoaded', function() {
+        // 点赞功能
+        const likeButtons = document.querySelectorAll('.stat:nth-child(2)');
+        likeButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('liked');
+                const icon = this.querySelector('i');
+                if (this.classList.contains('liked')) {
+                    icon.classList.remove('fa-heart');
+                    icon.classList.add('fas', 'heart', 'fa-solid');
+                } else {
+                    icon.classList.add('fa-heart');
+                    icon.classList.remove('fas', 'heart', 'fa-solid');
+                }
             });
         });
-    }
 
-    // 发送消息功能
-    sendButton.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
-    function sendMessage() {
-        const messageText = messageInput.value.trim();
-        const hasAttachments = uploadedFiles.length > 0;
-
-        if (!messageText && !hasAttachments) {
-            return;
-        }
-
-        // 创建消息元素
-        const messagesContainer = document.querySelector('.chat-messages');
-        const messageElement = document.createElement('div');
-        messageElement.className = 'message message-user';
-
-        let messageContent = '';
-
-        if (messageText) {
-            messageContent += `<div style="margin-bottom: ${hasAttachments ? '8px' : '0'};">${messageText}</div>`;
-        }
-
-        if (hasAttachments) {
-            messageContent += '<div style="display: flex; gap: 8px; flex-wrap: wrap;">';
-            uploadedFiles.forEach(file => {
-                messageContent += `
-                        <div class="attachment-item">
-                            <img src="${file.data}" alt="${file.name}">
-                        </div>
-                    `;
+        // 筛选按钮
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // 这里可以添加实际的筛选逻辑
             });
-            messageContent += '</div>';
-        }
-
-        messageElement.innerHTML = `
-                <div class="message-content user-message">${messageContent}</div>
-                <div class="message-meta">您 · 刚刚</div>
-            `;
-
-        messagesContainer.appendChild(messageElement);
-
-        // 清空输入
-        messageInput.value = '';
-        uploadedFiles = [];
-        updateAttachmentsPreview();
-
-        // 滚动到底部
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-        // 模拟AI回复
-        setTimeout(() => {
-            const aiResponse = document.createElement('div');
-            aiResponse.className = 'message message-ai';
-
-            let responseText = '';
-            if (messageText.toLowerCase().includes('构图')) {
-                responseText = `
-                        <div style="display: flex; gap: 16px; margin-bottom: 12px;">
-                            <img src="https://via.placeholder.com/150" alt="分析结果" style="border-radius: 8px; width: 150px;">
-                            <div>
-                                <p>您的照片构图分析：</p>
-                                <ol style="margin-top: 8px; padding-left: 20px;">
-                                    <li>主体位置符合三分法原则</li>
-                                    <li>背景稍显杂乱，建议虚化</li>
-                                    <li>水平线略微倾斜，建议调整</li>
-                                </ol>
-                            </div>
-                        </div>
-                    `;
-            } else {
-                responseText = `
-                        <p>已收到您${hasAttachments ? '上传的图片和' : ''}问题，正在分析中...</p>
-                        <p>建议您可以：</p>
-                        <ul style="margin-top: 8px; padding-left: 20px;">
-                            <li>调整光线角度</li>
-                            <li>尝试不同的拍摄角度</li>
-                            <li>使用后期处理增强效果</li>
-                        </ul>
-                    `;
-            }
-
-            aiResponse.innerHTML = `
-                    <div class="message-content ai-message">${responseText}</div>
-                    <div class="message-meta">AI助手 · 刚刚</div>
-                `;
-
-            messagesContainer.appendChild(aiResponse);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }, 1000);
-    }
-
-    // 拖放上传功能
-    const inputContainer = document.querySelector('.input-container');
-
-    inputContainer.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.style.borderColor = var(--primary);
-    });
-
-    inputContainer.addEventListener('dragleave', function() {
-        this.style.borderColor = '#e2e8f0';
-    });
-
-    inputContainer.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.style.borderColor = '#e2e8f0';
-
-        const files = Array.from(e.dataTransfer.files);
-        if (files.length > 0) {
-            fileInput.files = e.dataTransfer.files;
-            const event = new Event('change');
-            fileInput.dispatchEvent(event);
-        }
-    });
-
-    // 模拟超分辨率模块
-    function showSuperResolution() {
-        const functionArea = document.querySelector('.function-area');
-        functionArea.innerHTML = `
-                <div class="function-header">
-                    <div>
-                        <h2 class="function-title">超分辨率</h2>
-                        <p class="function-desc">提升图片分辨率，修复模糊细节</p>
-                    </div>
-                </div>
-
-                <div class="upload-area" id="super-res-upload">
-                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                    <div class="upload-text">拖放图片到此处或点击上传</div>
-                    <div class="upload-hint">支持JPG、PNG格式，最大10MB</div>
-                    <input type="file" id="super-res-input" accept="image/*" style="display: none;">
-                </div>
-
-                <div class="options-panel">
-                    <div class="option-group">
-                        <div class="option-title">放大倍数</div>
-                        <div class="checkbox-group">
-                            <label class="checkbox-item">
-                                <input type="radio" name="scale" checked> 2×
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="radio" name="scale"> 4×
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="radio" name="scale"> 8×
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="option-group">
-                        <div class="option-title">降噪强度</div>
-                        <div class="slider-container">
-                            <input type="range" min="0" max="100" value="50" class="slider">
-                            <span class="slider-value">50</span>
-                        </div>
-                    </div>
-
-                    <button class="process-button">开始增强</button>
-                </div>
-
-                <div class="result-container" style="display: none;">
-                    <div class="image-comparison">
-                        <img src="https://via.placeholder.com/600" alt="处理后">
-                        <div class="comparison-slider"></div>
-                        <img src="https://via.placeholder.com/600" alt="原图" style="position: absolute; top: 0; left: 0; width: 50%; height: 100%; object-fit: cover;">
-                    </div>
-
-                    <button class="download-button">
-                        <i class="fas fa-download"></i>
-                        <span>下载结果</span>
-                    </button>
-                </div>
-            `;
-
-        // 添加超分辨率模块的上传逻辑
-        const uploadArea = document.getElementById('super-res-upload');
-        const fileInput = document.getElementById('super-res-input');
-
-        uploadArea.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadArea.innerHTML = `
-                            <img src="${e.target.result}" style="max-width: 100%; max-height: 300px; border-radius: 8px;">
-                            <button style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">×</button>
-                        `;
-
-                    document.querySelector('.result-container').style.display = 'flex';
-                };
-                reader.readAsDataURL(file);
-            }
         });
-    }
 
-    // 模拟AI美颜模块
-    function showAIBeauty() {
-        const functionArea = document.querySelector('.function-area');
-        functionArea.innerHTML = `
-                <div class="function-header">
-                    <div>
-                        <h2 class="function-title">AI美颜</h2>
-                        <p class="function-desc">智能美化人像，一键提升颜值</p>
-                    </div>
-                </div>
-
-                <div class="upload-area" id="beauty-upload">
-                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                    <div class="upload-text">拖放人像照片到此处或点击上传</div>
-                    <div class="upload-hint">支持JPG、PNG格式，最大10MB</div>
-                    <input type="file" id="beauty-input" accept="image/*" style="display: none;">
-                </div>
-
-                <div class="options-panel">
-                    <div class="option-group">
-                        <div class="option-title">美化强度</div>
-                        <div class="slider-container">
-                            <input type="range" min="0" max="100" value="50" class="slider">
-                            <span class="slider-value">50</span>
-                        </div>
-                    </div>
-
-                    <div class="option-group">
-                        <div class="option-title">美化选项</div>
-                        <div class="checkbox-group">
-                            <label class="checkbox-item">
-                                <input type="checkbox" checked> 皮肤平滑
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" checked> 祛痘祛斑
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox"> 大眼
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox"> 瘦脸
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" checked> 美白牙齿
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox"> 亮眼
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="option-group">
-                        <div class="option-title">风格滤镜</div>
-                        <div class="checkbox-group">
-                            <label class="checkbox-item">
-                                <input type="radio" name="filter" checked> 自然
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="radio" name="filter"> 清新
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="radio" name="filter"> 胶片
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="radio" name="filter"> 冷白皮
-                            </label>
-                        </div>
-                    </div>
-
-                    <button class="process-button">开始美化</button>
-                </div>
-
-                <div class="result-container" style="display: none;">
-                    <div class="image-comparison">
-                        <img src="https://via.placeholder.com/600" alt="处理后">
-                        <div class="comparison-slider"></div>
-                        <img src="https://via.placeholder.com/600" alt="原图" style="position: absolute; top: 0; left: 0; width: 50%; height: 100%; object-fit: cover;">
-                    </div>
-
-                    <button class="download-button">
-                        <i class="fas fa-download"></i>
-                        <span>下载结果</span>
-                    </button>
-                </div>
-            `;
-
-        // 添加AI美颜模块的上传逻辑
-        const uploadArea = document.getElementById('beauty-upload');
-        const fileInput = document.getElementById('beauty-input');
-
-        uploadArea.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadArea.innerHTML = `
-                            <img src="${e.target.result}" style="max-width: 100%; max-height: 300px; border-radius: 8px;">
-                            <button style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">×</button>
-                        `;
-
-                    document.querySelector('.result-container').style.display = 'flex';
-                };
-                reader.readAsDataURL(file);
-            }
+        // 分页按钮
+        const pageBtns = document.querySelectorAll('.page-btn:not(.disabled)');
+        pageBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    document.querySelector('.page-btn.active').classList.remove('active');
+                    this.classList.add('active');
+                    // 这里可以添加实际的分页逻辑
+                }
+            });
         });
-    }
 
-    // 导航切换事件
-    document.querySelectorAll('.nav-item')[1].addEventListener('click', showSuperResolution);
-    document.querySelectorAll('.nav-item')[2].addEventListener('click', showAIBeauty);
+        // 加载更多
+        document.querySelector('.load-more-btn').addEventListener('click', function() {
+            // 模拟加载
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-plus"></i> 加载更多作品';
+                alert('已加载更多作品');
+            }, 1500);
+        });
+    });
 </script>
 </body>
 </html>
